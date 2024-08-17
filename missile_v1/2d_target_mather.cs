@@ -1,8 +1,8 @@
-#region Guidance
+#region Guidance Computer
 class Guidance_Computer
 {
 
-    const double time_between_run_sec = 0.6d;
+    const float time_between_run_sec = 0.6f;
     private Vector3D target_position;
     private Vector3D current_position;
     public Vector2D target_vector;
@@ -28,7 +28,7 @@ class Guidance_Computer
         top = Math.Sqrt(top);
 
         double solution_1 = -velocity + top;
-        solution_1 /= (2 * acceleration);
+        solution_1 /= 2 * acceleration;
         if (solution_1 > 0)
         {
             return solution_1;
@@ -82,8 +82,34 @@ class Guidance_Computer
 }
 #endregion
 
-public Program() { }
+
+
+IMyRemoteControl remote_control;
+
+Guidance_Computer meow;
+
+
+public Program()
+{
+    remote_control = GridTerminalSystem.GetBlockWithName("AGG-7-1 Remote Control") as IMyRemoteControl;
+    if (remote_control == null)
+    {
+        Echo("failed to get blocks");
+
+    }
+    else
+    {
+        meow = new Guidance_Computer(remote_control);
+    }
+
+    Runtime.UpdateFrequency = UpdateFrequency.Update10;
+
+    Echo("inited");
+}
 
 public void Save() { }
 
-public void Main(string argv) { }
+public void Main(string argv)
+{
+
+}
